@@ -1,0 +1,32 @@
+========================================================================================================================
+Overview:
+  This is the overview
+  
+========================================================================================================================
+Directories:
+  crossSections: This directory contains two subdirectories that store gamma ray cross sections for elemental and
+                 composite materials. Also in this directory is the XCOM code from NIST
+                 (http://www.nist.gov/pml/data/xcom/) which can be used to generate cross sections for materials that
+                 are not listed in the databases. 
+  
+  data:          Houses the quenching data used in the code.
+  
+  include:       This directory contains the headers for the classes and functions needed for the simulation. The
+                 documentation for each class/header is fairly complete, so see these for more information.
+  
+  inputs:        Contains the input for the code. The input file, quench.in, has comments relating to its use and
+                  format.
+                  
+  lib:           Contains the object files for the classes/headers
+
+  old:           Contains old code that is not relevant for the use of the simulation.
+
+  outputs:       Contains the outputs of the quenching code. 
+  
+  src:           This directory contains the definitions for the classes and functions needed for the simulation. The
+                 documentation for each class/header is fairly complete, so see these for more information.
+  
+========================================================================================================================
+Programs:
+  quench: This code simulates the neutrino capture tag and A2 background events for LENS. The code does the appropirate 
+          gamma tracking and outputs the location of the scatters with quenching applied. 
