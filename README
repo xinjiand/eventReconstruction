@@ -1,0 +1,303 @@
+========================================================================================================================
+What to do:
+  1. For detailed information read this README, seriously it is only 303 lines and it contains a lot of information.
+  2. For getting started quickly, do the following:
+      a. List the data files that you want to use in inputs/geantDataList.txt, run readGeantData and follow the prompts;
+      b. Run the program scriptGenerator;
+      c. Run the script runLightTransport.sh. Note that if you listed lots of files then you can
+         expect that the light transport will take a while;
+      d. Run the script runReconstruction.sh. Again this may take a while.
+     Or, to run b.-d. run the script masterScript.sh and follow its prompts, but only if you are NOT using split scrpits!
+     
+     This produces events files (located in the eventFiles directory) for each of the data files listed in
+     inputs/geantDataList.txt that contain the Geant4 simulation data, the light transport inputs and outputs, and the
+     reconstruction.
+     
+  If you get an error saying that the template waveforms cannot be found or that the preamble does not match the
+  currently defined macros then you will need to generate the basis waveforms. For a how-to, jump down to the template
+  waveform generation section. 
+
+========================================================================================================================
+Data file listing:
+  In the data directory one will find subdirectories named based on the content of the Geant4 simulation, for example
+  positron_02000keV. In each of these directories one will find many files with names such as
+  positron_02000keV_000000000.dat or positron_02000keV_591107087.dat. Nominally these files will contain 1000 events
+  with the file positron_02000keV_000000000.dat having the first 1000 events and the file 
+  positron_02000keV_000000001.dat having the second 1000 events and so on. These file names (and relative paths) are
+  what need to be placed in the file inputs/geantDataList.txt. More information on this can be found below in the
+  program listing section. Some of the data files correspond to simulations of an infinite medium while others
+  correspond to a direct simulation of the NuLat geometry. The data files for the separate categories are listed in the
+  file inputs/dataFileInfo.txt. 
+
+========================================================================================================================
+Important Program and File Listing:
+  detectorParameters.hh:        This file has preprocessor defined constants that describe the detector to be simulated
+                                and reconstructed. These constants are used to generate the the input file for the light
+                                transport; therefore, it is best to let the code take care of the input file generation. 
+                                This file has a plethora of comments so see it in the include directory for more
+                                information.
+                         
+  reconLib.hh:                  Along with detectorParameters.hh this is one of the most important files for the
+                                analysis chain. It contains some additional macros that control the behavior of the
+                                reconstruction. Again, like detectorParameters.hh these are heavily comments so see the
+                                file for more detail. 
+
+  readGeantData.cc:             This program (called read for short) reads the text file inputs/geantDataList.txt which
+                                has a list of Geant4 generated output files; these files are in the data directory under
+                                a subdirectory named with the data file's base name, see the section above for more
+                                information.
+    
+                                Each event in these files is read and placed in the detector according to the
+                                configuration that is set in the file inputs/readConfig.txt. The configuration will be
+                                written to the terminal and the user asked for confirmation before the program proceeds.
+                                More information on the flags used to set the configuration can be found in the file
+                                inputs/readConfig.txt; that said, the basic function of the configuration is to set the
+                                location of the start of the event and the event's orientation with respect to the
+                                detector's coordinate system. To ensure proper behavior ensure that the distribFlag is
+                                appropriate to the data Files that are listed in inputs/geantDataList.txt. More
+                                information is in inputs/dataFileInfo.txt and inputs/readConfig.txt. Note that the hit
+                                times are adjusted in read so that the first hit is at t=0.
+
+                                A quick note on the detector's coordinate system: the coordinate system that read
+                                assumes has the detector centered at the origin; this is also the coordinate system that
+                                the Geant4 simulation uses. However, the system used by the light transport code trans
+                                is different. Read makes the appropriate transformation between these two systems. 
+
+                                Read will next generate a bash script that will call the light transport code (trans.f,
+                                see below for the program details). These scripts are located in a subdirectory (named
+                                appropriately) of the simulationScripts directory. In addition, the name of these
+                                scripts will be written to the file inputs/scriptGenerator.in which is used by the
+                                script generator program detailed below. 
+
+                                This program also produces the so-called event files that contain, after the full run
+                                though of the analysis chain, all of the information related to the event's generation.
+                                The file format's specification can be found below.
+
+                                Finally, since the light transport is intended to be called with the scripts generated
+                                here readGeantData will also set the light transport input file (inputs/trans.dat).
+                         
+  IBD_Generator.cc              This code is for generating IBD event files from positron and neutron Geant4 data. In
+                                this sense it is very similar to the read program described above; in fact the
+                                IBD_Generator uses the file inputs/readConfig.txt to do the detector configuration.
+                                Unlike read, however, there are no external events.
+
+                                To list the positron and neutron data files place the positron data file first then the
+                                neutron data file. It is up to the user to place the correct positron and neutron data
+                                files together; IBD_Generator does not check for consistency.
+                                
+                                For IBD events, the incident neutrino is assumed to be moving in the +z direction, the
+                                positron is emitted isotropically (a good enough approximation for now, but will be
+                                implementing the differential cross section from P. Vogel and J. F. Beacom, Phys. Rev.
+                                D, 60, 053003 (1999) in the future.) with a kinetic energy of the incident neutrino less
+                                the threshold energy for IBD, and the neutron is assumed to carry no energy, but its
+                                direction is given by momentum conservation. This is a very good (~0.5% error)
+                                approximation to the true IBD kinematics. Just like read IBD_Generator makes all needed
+                                bash scripts to run the light transport; however, the scripts to run the positron and
+                                the neutron events are separate. The program combineIBD_Events.cc is used to combine the
+                                positron and neutron deposits back together in the event file. See below for more
+                                detail.
+
+                                A note on the event timing: due to the limited length of the waveform buffer in the
+                                light transport code both the positron and the neutron visible deposits are started at
+                                t=0. To recover the time between the positron and the neutron deposits you will have to
+                                parse the event file in analysis. This is not a real issue since the long coincidence 
+                                time can be accuratly measured in the detector. 
+
+  scriptGenerator.cc            This code reads the text file scriptGenerator.in (which is written by read, or can be
+                                edited by hand) and generates two bash scripts for every input. One script is for
+                                calling the light transport scripts generated by read and the other script calls the
+                                reconstruction code. Both of these scripts call a program called addToEventFile to add
+                                either the light transport or the reconstruction results to the event file.
+                         
+                                When running a large number of events it is useful to split up the scripts so that they
+                                can be run in parallel. To use this feature change the macro N_SPLIT to the desired
+                                number of scripts that you want to generate. This should be a number less than or equal
+                                to the number of cores that you have available on your machine. The program will still
+                                produce the scripts runLightTransport.sh and runReconstruction.sh, but these will call
+                                other scripts that are run in the background. In addition note that since the scripts
+                                are run in the background then you cannot run runReconstruction.sh immediately after
+                                runLightTransport.sh finishes; this also implies that you should use masterScript.sh 
+                                with runReconFlag=0. To clean-up the generated scripts run cleanScripts.sh. Also see the
+                                section below on parallelization. 
+                      
+  trans.f                       This code runs the light transport code for the lattice. The input file is in the inputs
+                                directory and it contains some comments on the meaning of the variables. The input file
+                                is set automatically by the read program (see above) but can be edited by hand as well;
+                                however, this is not recommended.  The outputs for trans (trans-pmt.dat and
+                                trans-time.dat) are located in the outputs directory. These files are overwritten unless
+                                the add flag is added to the CL arguments of the light transport call, so the script
+                                that calls trans concatenates the outputs for an event into the file lightTrans.out
+                                (also in the outputs directory).
+                               
+                                Currently the code assumes either a 2.2 ns scintillation decay time or the time response
+                                curves for different particle from "Comparative analysis of pulse shape discrimination
+                                methods in a 6Li loaded plastic scintillator", NIM, 788A, 146 (2015). There is no time
+                                smearing from the PMTs, however.
+                         
+  addToEventFile.cc             This code adds either the light transport or the reconstruction results to the event
+                                file. The program is called with two command line arguments: an integer that specifies
+                                what to add to the event file (0->light transport and 1->reconstruction), and the event
+                                event file name. This program is called by the scripts written by the scriptGenerator so
+                                the user will not have to call the program on their own. An additional flag is used when
+                                using split scripts, but this is handled automatically when the light transport scripts
+                                are generated by read. Therefore, in short, the end user will not have to call this
+                                program themselves. 
+                         
+  removeFromEventFile.cc        This code is dual to the previous program in that it will remove from the event file the
+                                headers which were not written by read. The program takes two command line arguments: an
+                                integer flag (0<= flag <=4) that specifies the headers to remove, and the name of the
+                                event file. The header removal flag is mapped thusly:
+                               
+                                #Light_transport_properties <-> 4
+                                #Cells_deposits             <-> 3
+                                #PMT_charges                <-> 2
+                                #PMT_waveforms              <-> 1
+                                #Reconstruction             <-> 0
+                               
+                                This code's use is intended mainly for testing purposes during debugging.
+                               
+  combineIBD_Events.cc          This code combines the outputs of either the light transport or the reconstruction for
+                                the positron and the neutron deposits associated with IBD events. The program outs these
+                                seperate outputs into a form suitable for addToEventFile which will insert them into the
+                                event file. 
+
+  splitIbdForReconstruction.cc  This code splits up the event file for IBD events so that the positron and neutron
+                                deposits can be reconstructed seperatly. This code is called automatically by
+                                runReconstruct.sh when dealing with IBD events; therefore, the user is not expected to
+                                call this program directly. 
+
+  basisGenerator.cc             This program generates the bash script (runBasis.sh) that calls the light transport code
+                                in order to generate the template waveforms of the reconstruction. This code also sets
+                                sets the preamble of the file where these templates are store. The preamble contains the
+                                inputs for the light transport that were used to generate the data. If you suspect that
+                                the results you are trying to reconstruct have different inputs to the light transport
+                                than the basis data run diff on the files to check. The reconstruction will also check
+                                to see if there were any differences between the preamble and the currently defined
+                                macros. 
+                               
+                                To get the basis data run basisGenerator and then the script runBasis.sh, or see the
+                                template waveform generation section below. 
+  
+  addBasis.cc                   This program is called by the script runBasis.sh and it adds the waveform produced by
+                                the light transport to the appropriate file in the reconstrctionData directory. 
+
+  chargeReconstruction.f        This is the original (charge only) reconstruction code that Bruce wrote. It is
+                                integrated into the simulation and analysis chain by the setting the RECON_PROGRAM macro
+                                in reconLib.hh to 0 and running make. Other than this the procedure for running the
+                                chain is the same as the one detailed above. Note however, that since this program
+                                includes no timing information a time of -1.0 ns is outputted for all cells hit. 
+
+  reconstruct.cc                This program reconstructs both the charge and timing of the light transport outputs. The
+                                configuration file for this program is inputs/reconConfig.txt, which contains ample
+                                comments on the program's use. There are also comments in the file include/reconLib.hh
+                                for the macros which control the functionality of the code. 
+                                
+  eventDisplay.cc               This program generates gnuplot scripts for plotting true and reconstructed events. The
+                                behavior of this program is controled with two text files, both of which are in the
+                                inputs directory. Thes files, eventDisplayConfig.txt and eventDisplay.in, control the
+                                configuration and the events to be plotted. More information can be found in these
+                                files.
+  
+  makeIterationsFile.cc         This program is used for making plots of the reconstruction process. It sets an event
+                                file in such a way that the eventDisplay program can make plots of the interative plot.
+  
+  eventListGenerator.cc         This code is involved with the fake data production chain. It is currently under
+                                development and is not intended to be run at this point in time. 
+
+  getTriggerEvents.cc           This code is involved with the fake data production chain. It is currently under
+                                development and is not intended to be run at this point in time. 
+
+  recordTriggerEvents.cc        This code is involved with the fake data production chain. It is currently under
+                                development and is not intended to be run at this point in time.                                                  
+
+========================================================================================================================
+File Format Description:
+  This file format was cooked up by Bruce, Derek, Zach, and Tristan, and while it is probably not
+  the best file format, it will do for now. Currently the files are ASCII files, but we plan to move
+  to binary files in the near future; however, the format will not be much changed from what is
+  detailed below. Units for the data are given below; for the particle identification an integer
+  flag has been chosen for each particle type:
+    unknown     0
+    "gamma"     1
+    "e-"        2
+    "e+"        3            
+    "neutron"   4   
+    "proton"    5
+    "mu+"       6    
+    "mu-"       7        
+    "alpha"     8
+    "Li7"       9   
+    "deuteron"  10
+    "triton"    11   
+    
+  To identify multi-particle events like IBD the following ID's have been made:
+    "IBD"       100
+    
+#Event
+2
+  <event number>
+  <Geant4 seed for this event>
+#Geant4_properties
+5
+  <p,n,g,e+,e-,m,etc>
+  <energy (keV) OR (MeV)>
+  <starting position: x(mm), y(mm), z(mm)>
+  <starting direction: theta(degrees), phi(degrees)>
+  <time(ps)>
+#Energy_deposits
+<#-deposits> <#-positron-deposits(IBD only)> <#-neutron-deposits(IBD only)>
+  <type, x, y, z, t(ns), E(MeV), dE(MeV)> (Note that the E is not currently used.)
+#Light_transport_properties
+3
+  <starting position: x(cm), y(cm), z(cm)>
+  <Euler angle: alpha(degrees), beta(degrees), gamma(degrees)> <gamma-neutron(degrees, IBD only)>
+  <time(ps)>
+#Cells_deposits
+<#-cells> <#-positron-cells(IBD only)> <#-neutron-cells(IBD only)>
+  <nx, ny, nz, t-first (ns), t-centroid (ns), e-cell (MeV)>
+#PMT_charges
+<# of pmts hit> <#-positron-pmts(IBD only)> <#-neutron-pmts(IBD only)>
+  <nx, ny, nz, charge>
+#PMT_waveforms
+<# of time bins> <#-positron-bins(IBD only)> <#-neutron-bins(IBD only)>
+  <nx, ny, nz, time bin (1-indexed), charge>
+#Reconstruction
+<#-cells> <#-positron-cells(IBD only)> <#-neutron-cells(IBD only)>
+    <nx,ny,nz,time (ns),energy (MeV)>
+#Misc (NOT IMPLEMENTED)
+  1
+  <#-miscellaneous-pre-calculated-values>
+    value – keyword
+    value – keyword
+    
+========================================================================================================================
+Template waveform generation section:
+  1. Set the desired values for your detector in include/detectorParameters.hh. This file contains
+     detailed comments for each of the macros.
+  2. Compile the code by running make. 
+  3. Run the basisGenerator program. This will produce the basis data file with the detector
+     parameters included as a preamble and the script runBasis.sh. Note that basisGenerator.cc has a
+     macro called ENERGY that sets the energy to be used in the light transport. This should be a
+     large number to decrease statistical fluctuations, but not too large as to unreasonably
+     increase runtime. A value of 80,000 MeV and a NuLat detector 15 cells on a side takes about 8
+     hours to run.
+  4. Run the script runBasis.sh. 
+  5. Wait, because this will take a while. 
+
+========================================================================================================================
+Note on parallelization:
+  In the file include/reconLib.hh there is a macro N_SPLIT that will allow for the scripts called
+  from runLightTransport.sh to be split into sub-scripts which can then be run in parallel. N_SPLIT
+  must be a positive number and should not exceed the number of cores on your machine. Also note
+  that when running with N_SPLIT>1 be careful with the use of the script masterScript.sh because it
+  will not wait for the light transport to finish before calling the reconstruction; this could
+  introduce unknown errors to occur. Therefore, if you use this feature it is best to run things "by
+  hand".
+    
+========================================================================================================================
+For developers:
+  If you are interested in adding functionality to the code, then run in the terminal
+    $ rgrep "//TO DO:".
+  This will list lines in the programs where some new functionality is desired but not implemented.
+  Naturally, if you are using the code and want to make a note for added functionality add the grep
+  pattern above with a brief description of what you want done. 

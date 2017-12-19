@@ -1,0 +1,205 @@
+PE_MIN=10
+13
+15
+46
+50
+61
+71
+78
+117
+153
+155
+165
+174
+240
+251
+283
+291
+293
+321
+353
+359
+360
+412
+420
+434
+482
+498
+521
+542
+570
+584
+606
+612
+630
+644
+663
+682
+722
+742
+751
+757
+768
+784
+795
+840
+898
+1041
+1071
+1075
+1106
+1136
+1147
+1148
+1174
+1178
+1222
+1243
+1249
+1268
+1283
+1305
+1310
+1321
+1336
+1338
+1370
+1395
+1432
+1451
+1466
+1493
+1499
+1505
+1515
+1528
+1543
+1551
+1563
+1564
+1580
+1607
+1615
+1636
+1680
+1707
+1742
+1756
+1785
+1818
+1823
+1847
+1860
+1894
+1895
+1934
+1959
+1970
+1973
+1983
+1986
+1991
+2000
+2009
+2046
+2081
+2085
+2090
+2125
+2143
+2181
+2189
+2190
+2197
+2221
+2251
+2272
+2358
+2379
+2381
+2391
+2392
+2395
+2407
+2440
+2449
+2456
+2468
+2527
+2555
+2564
+2584
+2593
+2604
+2612
+2622
+2625
+2642
+2676
+2760
+2782
+2792
+2819
+2822
+2844
+2862
+2906
+2911
+2928
+2940
+2971
+2975
+2979
+2998
+3008
+3122
+3182
+3185
+3190
+3208
+3264
+
+PE_MIN=3
+
+61    Energy too high
+78    Energy too high
+174   Looks good
+321   Energy too high
+482   Energy too high
+521   Looks good
+584   Energy too high
+612   Energy too high
+682   Looks good
+742   Energy too high
+751   Energy too high
+1249  Energy too high
+1268  Energy too high
+1283  Energy too high
+1451  Energy too high
+1499  Looks good
+1515  Energy too high
+1543  Energy too high
+1551  Looks good
+1564  Energy too high
+1580  Looks good
+1615  Energy too high
+1680  Looks good
+1756  Energy too high
+1785  Energy too high
+1818  Energy too high
+1959  Energy too high
+1970  Energy too high
+1983  Energy too high
+2046  Energy too high
+2081  Energy too high
+2125  Looks good
+2272  Energy too high
+2358  Energy too high
+2440  Looks good
+2564  Looks good
+2622  Looks good
+2642  Looks good
+2822  Energy too high
+2940  Energy too high
+3008  Looks good
+3182  Energy too high
