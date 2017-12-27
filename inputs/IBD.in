@@ -1,0 +1,39 @@
+# This is the input file for the "Inverse Beta Decay" Generator
+# List the inputs thusly:
+# positronFileName1
+# neutronFileName1
+# positronFileName2
+# neutronFileName2
+# .
+# .
+# .
+#
+# Lithium-loaded
+#
+data/positron_01000keV/positron_01000keV_000000000.dat
+data/neutron_lithium_03000keV_c/neutron_lithium_03000keV_c_000000000.dat
+data/positron_01500keV/positron_01500keV_000000000.dat
+data/neutron_lithium_03000keV_c/neutron_lithium_03000keV_c_000000000.dat
+data/positron_03000keV/positron_03000keV_000000000.dat
+data/neutron_lithium_05000keV_c/neutron_lithium_05000keV_c_000000000.dat
+data/positron_03500keV/positron_03500keV_000000000.dat
+data/neutron_lithium_05000keV_c/neutron_lithium_05000keV_c_000000000.dat
+data/positron_05000keV/positron_05000keV_000000000.dat
+data/neutron_lithium_07000keV_c/neutron_lithium_07000keV_c_000000000.dat
+data/positron_05500keV/positron_05500keV_000000000.dat
+data/neutron_lithium_07000keV_c/neutron_lithium_07000keV_c_000000000.dat
+#
+# Boron-loaded
+#
+#data/positron_01000keV/positron_01000keV_000000000.dat
+#data/neutron_boron_03000keV_c/neutron_boron_03000keV_c_000000000.dat
+#data/positron_01500keV/positron_01500keV_000000000.dat
+#data/neutron_boron_03000keV_c/neutron_boron_03000keV_c_000000000.dat
+#data/positron_03000keV/positron_03000keV_000000000.dat
+#data/neutron_boron_05000keV_c/neutron_boron_05000keV_c_000000000.dat
+#data/positron_03500keV/positron_03500keV_000000000.dat
+#data/neutron_boron_05000keV_c/neutron_boron_05000keV_c_000000000.dat
+#data/positron_05000keV/positron_05000keV_000000000.dat
+#data/neutron_boron_07000keV_c/neutron_boron_07000keV_c_000000000.dat
+#data/positron_05500keV/positron_05500keV_000000000.dat
+#data/neutron_boron_07000keV_c/neutron_boron_07000keV_c_000000000.dat

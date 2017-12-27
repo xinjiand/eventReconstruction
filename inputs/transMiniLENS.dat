@@ -1,0 +1,30 @@
+0.000000     !pmtreflect    reflection from pmt faces
+2000          !ntbin         how many ps to bin together (integer)
+21          !ntprint       how many time bins to print out (integer)
+8.255000     !celldim       corresponds to 2.5 inches
+3.600000     !pmtr          estimated photo-cathode of 2 inch tube
+0.000010     !tfilm         corresponds to basically no film
+100.000000     !glength       overall length of guide (cm)
+0.500000     !gztrans       detector side to where one transitions from rectangular to condensing guide
+0.985000     !agrcoef       reflection coefficient VM200 film
+0.000010     !tgfilm        thickness of guide film (cm)
+12000.000000 !pcyield       photons per MeV
+0.250000     !qe            quantum efficiency
+0.600000     !relativeyield photon yield relative to PC
+1.500000     !rscint        index of plastic scintillator
+1.490000     !rshield       index of refraction for guide material (acrylic)
+800.000000   !ascint        1/e attenuation length for scintillator
+500.000000   !agfilm        1/e attenuation length (cm) for guide film
+700.000000   !agbuffer      1/e attenuation length (cm) for guide fluid
+500.000000   !afilm1        1: 1/e attenuation for acrylic plate
+1            !nfilms1       1: nfilms
+1.000000     !rgap1         1: gap index air
+0.025400     !gapwidth      1: region without reflection on 6 sides of cell
+500.000000   !afilm2        2: 1/e attenuation for film
+1            !nfilms2       2: nfilms
+1.225000     !rgap2         2: gap index perfluorooctane
+0.025400     !gapwidth      2: region without reflection on 6 sides of cell
+0.500000     !afilm3        3: 1/e attenuation for film
+1            !nfilms3       3: nfilms
+1.343000     !rgap3         3: gap index teflon
+0.012700     !gapwidth      3: region without reflection on 6 sides of cell

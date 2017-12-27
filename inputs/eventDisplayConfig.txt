@@ -1,0 +1,15 @@
+# The following are needed to define the configuration of the event display
+# <terminal type> (default or a gnuplot terminal name)
+# <plot type> (energy or time)
+# <scale type> (power10, lin, sqrt, or log)
+# <color sheme> (Must be one of the pre-defined color maps. See eventDisplay.cc for more information)
+# <pmt spacing> (Must be a number (0,1]. Default is 0.9)
+# <cube size> (Must be a number (0,1]. Default is 0.4. If you are curious 0.1 is 0.25" in real life.)
+# <what to plot flag> 0 for both the cells and the PMTs, 1 for just the PMTs, and 2 for just the cells
+default
+energy
+sqrt
+winter
+0.7
+0.7
+1

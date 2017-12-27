@@ -1,0 +1,7 @@
+# List here the event files and the event number that you want to display. List thusly:
+#
+# eventFileName eventNumber reconOrTrueFlag
+#
+# The reconOrTrueFlag is 0 for the reconstructed event and 1 for the true event.
+#
+eventFiles/test_1_Cell_01000keV/test_1_Cell_01000keV_000000000_Event_0.dat 0 0

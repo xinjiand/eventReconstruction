@@ -1,0 +1,28 @@
+#This file contains the configuration flags for the reconstruction program.
+#The flags give the following behavior:
+# reconType:    This number gives the type of reconstruction to use: 0->charge only (ie. a
+#               replication of Bruce's tt-v2 code); 1->waveform for both the primary and side
+#               channel PMTs (This reconstruction takes a step in E then a step in t.); 2-> charge
+#               first and then the waveform reconstruction, with the energies fixed, to set the cell
+#               timing.
+# nCells:       The number of cells along a side of the detector. You will also have to change the
+#               value in the file include/detectorParameters.hh.
+# latticeFlag   This flag sets the type of lattice the detector uses: 1 -> air-gap, 2 -> 
+#               perfluooctane, and 3 -> Teflon FEP. You will also have to change the value in the
+#               file include/detectorParameters.hh.
+# mirrorFlag:   This flag turns on (mirrorFlag==1) of off (mirrorFlag==0) mirrors for the lattice
+#               light transport code. You will also have to change the value in the file
+#               include/detectorParameters.hh.
+# guideFlag:    This flag turns on light guides (for guideFlag==1, 2, or 3 the lattice light
+#               transport code gangs 1, 2, or 3 lattice channels together respectively) or off
+#               (guideFlag==0). You will also have to change the value in the file
+#               include/detectorParameters.hh.
+#
+#               WARNING: The reconstruction may not have the required parameters for certain
+#               options.
+#
+reconType       2
+nCells          15
+latticeFlag     1
+mirrorFlag      1
+guideFlag       1

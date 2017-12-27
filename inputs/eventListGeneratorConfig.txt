@@ -1,0 +1,30 @@
+# This file contains the configuration flags for the fake data generator.
+# The flags give the following behavior:
+# genFlag:        Picks the random number generator to use. 
+# seedFlag:       Seeds the random number generator with a known seed (seedFlag=0 -> seed=1013) or a
+#                 UNIX time seed (seedFlag==1).
+# nCells:         The number of cells along a side of the detector. You will also have to change the
+#                 value in the file include/detectorParameters.hh.
+# latticeFlag:    This flag sets the type of lattice the detector uses: 1 -> air-gap, 2 -> 
+#                 perfluooctane, and 3 -> Teflon FEP. You will also have to change the value in the
+#                 file include/detectorParameters.hh.
+# mirrorFlag:     This flag turns on (mirrorFlag==1) of off (mirrorFlag==0) mirrors for the lattice
+#                 light transport code. You will also have to change the value in the file
+#                 include/detectorParameters.hh.
+# guideFlag:      This flag turns on light guides (for guideFlag==1, 2, or 3 the lattice light
+#                 transport code gangs 1, 2, or 3 lattice channels together respectively) or off
+#                 (guideFlag==0). You will also have to change the value in the file
+#                 include/detectorParameters.hh.
+# reactorPower:   The power in MW of the reactor that the detector is deployed at  
+# baseline:       The distance in meters between the reactor core and the detector
+# backgroundRate: The rate that background gammas deposit energy in the detector in kHz  
+#
+genFlag         1
+seedFlag        0
+nCells          15
+latticeFlag     1
+mirrorFlag      1
+guideFlag       1
+reactorPower    20.0
+baseline        5.0
+backgroundRate  1000.0

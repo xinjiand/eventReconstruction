@@ -1,0 +1,28 @@
+# Enter the IBD and background gamma events files that you want included in the fake data set. The
+# number of IBD and gamma events files that you enter will set the initial signal to background
+# ratio.
+#
+# Note: The events files must have had to run through the full generation chain (ie. including
+#       light transport and reconstruction)
+eventFiles/IBD_02800keV/IBD_02800keV_000000000_Event.dat
+#eventFiles/IBD_03300keV/IBD_03300keV_000000000_Event.dat
+#eventFiles/IBD_04800keV/IBD_04800keV_000000000_Event.dat
+#eventFiles/IBD_05300keV/IBD_05300keV_000000000_Event.dat
+#eventFiles/IBD_06800keV/IBD_06800keV_000000000_Event.dat
+#eventFiles/IBD_07300keV/IBD_07300keV_000000000_Event.dat
+#
+eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-0_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-1_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-2_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-3_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-4_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-5_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-6_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-7_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-8_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-9_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-10_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-11_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-12_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-13_Event.dat
+#eventFiles/nist_Gamma_Background_01/NuLatSphereGammaBackground-14_Event.dat
